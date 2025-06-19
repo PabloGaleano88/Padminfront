@@ -1,0 +1,33 @@
+#root {
+  --colorheader: radial-gradient(at 29% 94%, #9682ce 0, #0000 50%),
+    radial-gradient(at 40% 20%, #af7aff 0, #0000 50%),
+    radial-gradient(at 9% 0, #e5dbff 0, #0000 50%),
+    radial-gradient(at 9% 91%, #a268f8 0, #0000 50%),
+    radial-gradient(at 80%, #ad85ff 0, #0000 50%),
+    radial-gradient(at 81% 13%, #b18aff 0, #0000 50%),
+    radial-gradient(at 73% 91%, #8166cc 0, #0000 50%),
+    radial-gradient(at 0 0, #b185ff 0, #0000 50%);
+  --colorheadertext: rgb(6, 38, 56);
+  --colortext: #72277f;
+  --button: #9b5fa9;
+  --buttonhover: #72277f;
+  width: 100%;
+}
+
+.App {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 95vw;
+}
+
+/* esto lo tengo que usar para que no rompa, porque al usar RRDOM se rompe */
+.main-content {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

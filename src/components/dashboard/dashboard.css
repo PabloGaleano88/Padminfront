@@ -1,0 +1,17 @@
+/* src/components/dashboard/dashboard.css */
+.dashboard-container {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  height: 100vh;
+}
+
+.dashboard-header {
+  background-color: #9b5fa9;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.dashboard-main {
+  margin-top: 2rem;
+}
