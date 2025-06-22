@@ -9,7 +9,6 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [role, setRole] = useState("medico");
-    const [passwordError, setPasswordError] = useState("");
     const navigate = useNavigate();
 
     const handleRegister = async (e: React.FormEvent) => {
@@ -24,7 +23,6 @@ export default function Register() {
             return;
         }
 
-        setPasswordError("");
 
         try {
             const res = await fetch("http://localhost:3000/api/auth/register", {
@@ -37,6 +35,9 @@ export default function Register() {
 
             if (res.ok) {
                 localStorage.setItem("token", data.token);
+                localStorage.setItem("user", JSON.stringify(data.user));
+
+
                 Swal.fire({
                     icon: "success",
                     title: "¡Registro exitoso!",
@@ -53,12 +54,14 @@ export default function Register() {
                 });
             }
         } catch (err) {
+            console.error("Error al registrarse:", err);
             Swal.fire({
                 icon: "error",
                 title: "Error de red",
                 text: "No se pudo conectar al servidor.",
             });
         }
+
     };
 
     return (
@@ -84,7 +87,6 @@ export default function Register() {
                 <div>
                     <label>Repetir Contraseña</label>
                     <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                    {passwordError && <p className="error-text">{passwordError}</p>}
                 </div>
 
                 <div>

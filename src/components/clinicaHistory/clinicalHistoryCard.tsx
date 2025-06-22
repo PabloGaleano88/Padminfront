@@ -1,0 +1,32 @@
+import "./clinicalHistoryCard.css";
+
+interface HistoriaClinica {
+    _id: string;
+    observations: string;
+    diagnosis: string;
+    treatment: string;
+    date: string;
+}
+
+interface Props {
+    historias: HistoriaClinica[];
+}
+
+export default function ClinicalHistoryCard({ historias }: Props) {
+    if (historias.length === 0) {
+        return <p>No hay historia clínica para este paciente.</p>;
+    }
+
+    return (
+        <div className="clinical-history-container">
+            {historias.map((historia) => (
+                <div key={historia._id} className="clinical-history-card">
+                    <p><strong>Fecha:</strong> {new Date(historia.date).toLocaleDateString()}</p>
+                    <p><strong>Observaciones:</strong> {historia.observations}</p>
+                    <p><strong>Diagnóstico:</strong> {historia.diagnosis || "N/A"}</p>
+                    <p><strong>Tratamiento:</strong> {historia.treatment || "N/A"}</p>
+                </div>
+            ))}
+        </div>
+    );
+}

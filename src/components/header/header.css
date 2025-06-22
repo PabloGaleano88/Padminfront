@@ -1,10 +1,9 @@
 .header {
   width: 100%;
   display: flex;
-  min-height: 91vh;
+  min-height: 100vh;
   background: var(--colorheader);
   border-radius: 15px;
-  margin: 10px;
   img {
     height: 50px;
   }

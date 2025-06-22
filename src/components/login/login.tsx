@@ -1,18 +1,56 @@
 import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Asegurate de tenerlo instalado: npm i sweetalert2
 import "./login.css";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Login attempt:", { email, password });
-        // Aquí podrías llamar a tu backend, por ejemplo:
-        // await loginUser({ email, password });
+
+        try {
+            const res = await fetch("http://localhost:3000/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                console.log(data)
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("userName", data.user.name);
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Bienvenido!",
+                    text: "Redirigiendo al panel principal...",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                }).then(() => navigate("/dashboard"));
+
+
+
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error de autenticación",
+                    text: data.error || "Credenciales incorrectas",
+                });
+            }
+        } catch (err) {
+            console.error("Error al iniciar sesión:", err);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Hubo un problema al conectar con el servidor.",
+            });
+        }
     };
 
     return (
@@ -20,11 +58,9 @@ export default function Login() {
             <div className="login-card">
                 <img className="logo-login" src="/logo.png" alt="" />
                 <h2 className="login-title">Te damos la bienvenida!</h2>
-                <h4>                    Ingresa tu correo electrónico y contraseña para acceder o registrarte.</h4>
+                <h4>Ingresa tu correo electrónico y contraseña para acceder o registrarte.</h4>
                 <form onSubmit={handleSubmit}>
-                    <label className="login-label" htmlFor="email">
-                        Correo electrónico
-                    </label>
+                    <label className="login-label" htmlFor="email">Correo electrónico</label>
                     <input
                         className="login-input"
                         type="email"
@@ -35,9 +71,7 @@ export default function Login() {
                         required
                     />
 
-                    <label className="login-label" htmlFor="password">
-                        Contraseña
-                    </label>
+                    <label className="login-label" htmlFor="password">Contraseña</label>
                     <input
                         className="login-input"
                         type="password"
@@ -47,17 +81,17 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button className="login-button" type="submit">
-                        Ingresar
-                    </button>
-                    <a className="login-forgot" href="">
-                        ¿Olvidaste tu contraseña? Te ayudamos
-                    </a>
+
+                    <button className="login-button" type="submit">Ingresar</button>
+                    <a className="login-forgot" href="">¿Olvidaste tu contraseña? Te ayudamos</a>
                 </form>
+
                 <div className="login-footer">
                     ¿Sos nuevo en Padmin? <Link to="/register">Create una cuenta</Link>
                 </div>
+
                 <div className="separator"></div>
+
                 <GoogleLogin
                     onSuccess={(credentialResponse) => {
                         fetch("http://localhost:3000/api/auth/google", {
@@ -67,17 +101,33 @@ export default function Login() {
                         })
                             .then((res) => res.json())
                             .then((data) => {
-                                console.log("Login exitoso:", data);
                                 localStorage.setItem("token", data.token);
-                                // redirigir al panel de usuario si querés
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Inicio de sesión con Google exitoso",
+                                    text: "Redirigiendo...",
+                                }).then(() => {
+                                    navigate("/dashboard");
+                                });
                             })
-                            .catch((err) => console.error("Error al iniciar sesión con Google", err));
+                            .catch((err) => {
+                                console.error("Error al iniciar sesión con Google", err);
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error con Google",
+                                    text: "No se pudo iniciar sesión",
+                                });
+                            });
                     }}
                     onError={() => {
-                        console.log("Falló el inicio de sesión con Google");
+                        Swal.fire({
+                            icon: "error",
+                            title: "Falló el inicio de sesión con Google",
+                            text: "Intentalo nuevamente",
+                        });
                     }}
                 />
             </div>
-        </div >
+        </div>
     );
 }
