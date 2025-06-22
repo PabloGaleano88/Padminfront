@@ -1,7 +1,8 @@
+import "./patitentDetail.css";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ClinicalHistoryCard from "../clinicaHistory/clinicalHistoryCard"; // importa el nuevo componente
-import "./patitentDetail.css";
+import Swal from "sweetalert2";
 
 interface Paciente {
     _id: string;
@@ -30,6 +31,27 @@ export default function PatientDetail() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+    // Función para recargar historias
+    const fetchHistorias = () => {
+        if (!id) return;
+
+        fetch(`http://localhost:3000/api/clinicalhistory/patient/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        })
+            .then((res) => {
+                if (!res.ok) throw new Error("Error al obtener la historia clínica");
+                return res.json();
+            })
+            .then((data) => {
+                setHistorias(data);
+            })
+            .catch((err) => {
+                console.error("Error al obtener historia clínica:", err);
+            });
+    };
+
     useEffect(() => {
         if (!id) return;
 
@@ -52,25 +74,91 @@ export default function PatientDetail() {
                 setError(err.message || "Error al obtener paciente");
             });
 
-        fetch(`http://localhost:3000/api/clinicalhistory/patient/${id}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-        })
-            .then((res) => {
-                if (!res.ok) throw new Error("Error al obtener la historia clínica");
-                return res.json();
-            })
-            .then((data) => {
-                setHistorias(data);
-            })
-            .catch((err) => {
-                console.error("Error al obtener historia clínica:", err);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        fetchHistorias();
+
+        setLoading(false);
     }, [id]);
+
+    const handleAddHistoria = async () => {
+        const { value: formValues } = await Swal.fire({
+            title: "Agregar historia clínica",
+            html: `
+                <label>Observaciones:</label>
+                <textarea id="swal-input-observations" class="swal2-textarea" placeholder="Observaciones"></textarea>
+
+                <label>Diagnóstico:</label>
+                <textarea id="swal-input-diagnosis" class="swal2-textarea" placeholder="Diagnóstico"></textarea>
+
+                <label>Tratamiento:</label>
+                <textarea id="swal-input-treatment" class="swal2-textarea" placeholder="Tratamiento"></textarea>
+            `,
+            focusConfirm: false,
+            confirmButtonText: "Guardar",
+            preConfirm: () => {
+                const observations = (document.getElementById("swal-input-observations") as HTMLTextAreaElement)?.value;
+                const diagnosis = (document.getElementById("swal-input-diagnosis") as HTMLTextAreaElement)?.value;
+                const treatment = (document.getElementById("swal-input-treatment") as HTMLTextAreaElement)?.value;
+
+                if (!observations) {
+                    Swal.showValidationMessage("Las observaciones son obligatorias");
+                    return null;
+                }
+
+                return { observations, diagnosis, treatment };
+            }
+        });
+
+        if (formValues) {
+            try {
+                const token = localStorage.getItem("token");
+                const res = await fetch("http://localhost:3000/api/clinicalhistory", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        patient: id,  // id del paciente desde useParams
+                        ...formValues,
+                    }),
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    Swal.fire("Error", errorData.error || "No se pudo agregar la historia clínica", "error");
+                    return;
+                }
+
+                Swal.fire("¡Historia clínica agregada!", "", "success");
+                fetchHistorias();  // recarga historias
+            } catch (error) {
+                Swal.fire("Error", "Error al agregar la historia clínica", "error");
+            }
+        }
+    };
+    const handleDeleteHistoria = async (historiaId: string) => {
+        const confirmar = window.confirm("¿Seguro que querés eliminar esta historia clínica?");
+        if (!confirmar) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(
+                `http://localhost:3000/api/clinicalhistory/${historiaId}`,
+                {
+                    method: "DELETE",
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            if (!res.ok) {
+                const err = await res.json();
+                return Swal.fire("Error", err.error || "No se pudo eliminar", "error");
+            }
+            Swal.fire("¡Eliminada!", "Historia clínica eliminada correctamente", "success");
+            fetchHistorias();
+        } catch (e) {
+            Swal.fire("Error", "Error al eliminar la historia clínica", "error");
+        }
+    };
 
     if (loading) return <p>Cargando paciente...</p>;
     if (error) return <p style={{ color: "red" }}>{error}</p>;
@@ -89,7 +177,9 @@ export default function PatientDetail() {
             <p><strong>Teléfono:</strong> {paciente.phone || "N/A"}</p>
 
             <h3>Historia Clínica</h3>
-            <ClinicalHistoryCard historias={historias} />
+            <button onClick={handleAddHistoria} className="btn-add-history">+ Agregar Historia Clínica</button>
+            <ClinicalHistoryCard historias={historias} onDelete={handleDeleteHistoria} />
+
 
             <button onClick={() => navigate(-1)}>Volver</button>
         </div>
