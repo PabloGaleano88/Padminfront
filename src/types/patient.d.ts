@@ -13,5 +13,6 @@ export interface Paciente {
     birthDate: string;
     email?: string;
     phone?: string;
+    motivoConsulta?: string;
     clinicalHistories: ClinicalHistory[];  // <-- aquí
 }

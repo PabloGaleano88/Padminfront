@@ -2,6 +2,7 @@ import "./patitentDetail.css";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ClinicalHistoryCard from "../clinicaHistory/clinicalHistoryCard"; // importa el nuevo componente
+import DashboardHeader from "../dashboardHeader/dashboardHeader";
 import Swal from "sweetalert2";
 
 interface Paciente {
@@ -11,6 +12,7 @@ interface Paciente {
     dni: string;
     birthDate: string;
     email?: string;
+    motivoConsulta?: string;
     phone?: string;
 }
 
@@ -160,28 +162,89 @@ export default function PatientDetail() {
         }
     };
 
+    const handleEditHistoria = async (historia: HistoriaClinica) => {
+        const { value: formValues } = await Swal.fire({
+            title: "Editar historia clínica",
+            html: `
+            <label>Observaciones:</label>
+            <textarea id="swal-input-observations" class="swal2-textarea">${historia.observations}</textarea>
+
+            <label>Diagnóstico:</label>
+            <textarea id="swal-input-diagnosis" class="swal2-textarea">${historia.diagnosis}</textarea>
+
+            <label>Tratamiento:</label>
+            <textarea id="swal-input-treatment" class="swal2-textarea">${historia.treatment}</textarea>
+        `,
+            focusConfirm: false,
+            confirmButtonText: "Guardar cambios",
+            preConfirm: () => {
+                const observations = (document.getElementById("swal-input-observations") as HTMLTextAreaElement)?.value;
+                const diagnosis = (document.getElementById("swal-input-diagnosis") as HTMLTextAreaElement)?.value;
+                const treatment = (document.getElementById("swal-input-treatment") as HTMLTextAreaElement)?.value;
+
+                if (!observations) {
+                    Swal.showValidationMessage("Las observaciones son obligatorias");
+                    return null;
+                }
+
+                return { observations, diagnosis, treatment };
+            },
+        });
+
+        if (formValues) {
+            try {
+                const token = localStorage.getItem("token");
+                const res = await fetch(`http://localhost:3000/api/clinicalhistory/${historia._id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(formValues),
+                });
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    Swal.fire("Error", err.error || "No se pudo editar la historia clínica", "error");
+                    return;
+                }
+
+                Swal.fire("¡Historia clínica actualizada!", "", "success");
+                fetchHistorias();
+            } catch (e) {
+                Swal.fire("Error", "Error al actualizar la historia clínica", "error");
+            }
+        }
+    };
+
+
     if (loading) return <p>Cargando paciente...</p>;
     if (error) return <p style={{ color: "red" }}>{error}</p>;
     if (!paciente) return <p>No hay paciente seleccionado</p>;
 
-    return (
-        <div className="patient-detail-container">
-            <h2>Detalle del paciente</h2>
-            <p><strong>Nombre:</strong> {paciente.firstName} {paciente.lastName}</p>
-            <p><strong>DNI:</strong> {paciente.dni}</p>
-            <p>
-                <strong>Fecha de Nacimiento:</strong>{" "}
-                {new Date(paciente.birthDate).toLocaleDateString()}
-            </p>
-            <p><strong>Email:</strong> {paciente.email || "N/A"}</p>
-            <p><strong>Teléfono:</strong> {paciente.phone || "N/A"}</p>
+    return (<>
+        <DashboardHeader />
+        <div className="patient-detail-layout">
+            <div className="patient-info">
+                <h2>Detalle del paciente</h2>
+                <p><strong>Nombre:</strong> {paciente.firstName} {paciente.lastName}</p>
+                <p><strong>DNI:</strong> {paciente.dni}</p>
+                <p><strong>Fecha de Nacimiento:</strong> {new Date(paciente.birthDate).toLocaleDateString()}</p>
+                <p><strong>Email:</strong> {paciente.email || "N/A"}</p>
+                <p><strong>Teléfono:</strong> {paciente.phone || "N/A"}</p>
+                <p><strong>Motivo de consulta:</strong> {paciente.motivoConsulta || "N/A"}</p>
 
-            <h3>Historia Clínica</h3>
-            <button onClick={handleAddHistoria} className="btn-add-history">+ Agregar Historia Clínica</button>
-            <ClinicalHistoryCard historias={historias} onDelete={handleDeleteHistoria} />
+                <button className="btn-back" onClick={() => navigate(-1)}>← Volver</button>
+            </div>
 
-
-            <button onClick={() => navigate(-1)}>Volver</button>
+            <div className="historia-clinica-section">
+                <div className="historia-clinica-header">
+                    <h3>Historia Clínica</h3>
+                    <button onClick={handleAddHistoria} className="btn-add-history">+ Agregar Historia Clínica</button>
+                </div>
+                <ClinicalHistoryCard historias={historias} onDelete={handleDeleteHistoria} onEdit={handleEditHistoria} />
+            </div>
         </div>
+    </>
     );
 }

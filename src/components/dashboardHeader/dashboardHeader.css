@@ -27,13 +27,16 @@
 }
 
 .menu {
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  background-color: white;
-  color: black;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  align-items: flex-end;
+  position: fixed; /* fijo para que cubra toda la pantalla */
+  top: 60px; /* justo debajo del header de 60px */
+  right: 0;
+  width: auto; /* ancho total de la pantalla */
+  height: calc(100vh - 60px); /* altura completa menos el header */
+  background-color: #8a329e; /* color violeta */
+  color: white; /* letras blancas */
+  border: none; /* sin borde */
+  border-radius: 0; /* sin bordes redondeados */
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -41,7 +44,7 @@
   pointer-events: none;
   transform: translateY(-10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 100;
+  z-index: 1000; /* encima del header */
 }
 
 .menu.open {
@@ -52,17 +55,14 @@
 
 .menu a {
   text-decoration: none;
-  color: #72277f;
+  color: white;
   margin: 0.5rem 0;
+  font-size: 1.2rem;
 }
 
-.menu a:hover {
-  text-decoration: underline;
-}
 .menu a,
 .logout-button {
   text-decoration: none;
-  color: #72277f;
   margin: 0.5rem 0;
   font: inherit;
   background: none;
@@ -75,5 +75,16 @@
 
 .menu a:hover,
 .logout-button:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  color: #f0e6f7;
+  transform: scale(1.1); /* un tono más claro de violeta */
+}
+
+.icon-link {
+  gap: 5px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  margin: 0.5rem 0;
 }

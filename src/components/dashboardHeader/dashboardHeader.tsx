@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./dashboardHeader.css";
+import HomeIcon from '@mui/icons-material/Home';
+import PersonIcon from '@mui/icons-material/Person';
+import GroupIcon from '@mui/icons-material/Group';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 export default function DashboardHeader() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -29,11 +33,11 @@ export default function DashboardHeader() {
                 ☰
             </div>
             <nav className={`menu ${menuOpen ? "open" : ""}`}>
-                <Link to="/dashboard">Dashboard</Link>
-                <Link to="/patients">Consultantes</Link>
-                <Link to="/perfil">Mi perfil</Link>
-                <button className="logout-button" onClick={handleLogout}>Cerrar sesión</button>
+                <div className="icon-link"><Link to="/dashboard">Dashboard</Link><HomeIcon /></div>
+                <div className="icon-link"><Link to="/patients">Consultantes</Link> <GroupIcon /></div>
+                <div className="icon-link"><Link to="/perfil">Mi perfil</Link><PersonIcon /></div>
+                <div className="icon-link"><button className="logout-button" onClick={handleLogout}>Cerrar sesión</button><ExitToAppIcon /></div>
             </nav>
-        </header>
+        </header >
     );
 }

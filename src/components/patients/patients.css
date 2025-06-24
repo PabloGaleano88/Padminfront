@@ -32,7 +32,7 @@
   color: #333;
   cursor: pointer; /* hace que parezca clickeable */
   width: 250px; /* o el tamaño que prefieras */
-  height: 150px; /* o el tamaño que prefieras */
+  height: 170px; /* o el tamaño que prefieras */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -79,4 +79,112 @@
   padding: 0.5rem;
   border-radius: 4px;
   border: 1px solid #ccc;
+}
+.btn-delete-paciente {
+  background-color: transparent;
+  padding: 0px;
+  color: red;
+}
+
+.btn-delete-paciente:hover {
+  background-color: transparent;
+  padding: 0px;
+  color: red;
+  border-color: white;
+}
+
+.patient-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pacientes-table {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pacientes-header,
+.paciente-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 0.5fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: white;
+  transition: background 0.3s ease;
+}
+
+.pacientes-header {
+  background-color: #f0e6f5;
+  font-weight: bold;
+  color: #72277f;
+}
+
+.paciente-row:hover {
+  background-color: #fdf6ff;
+  cursor: pointer;
+}
+
+.paciente-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-delete-paciente {
+  background-color: transparent;
+  padding: 0px;
+  color: red;
+}
+
+.btn-edit-paciente:hover {
+  background-color: transparent;
+  padding: 0px;
+  color: black;
+  border-color: white;
+}
+.btn-edit-paciente {
+  background-color: transparent;
+  padding: 0px;
+  color: black;
+}
+
+.btn-edit-paciente:hover {
+  background-color: transparent;
+  padding: 0px;
+  color: black;
+  border-color: white;
+}
+.search-input {
+  background-color: white;
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem;
+  margin: 1rem 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+.clear-button {
+  height: 35px;
+  background-color: var(--button);
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.clear-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  min-width: 450px;
 }

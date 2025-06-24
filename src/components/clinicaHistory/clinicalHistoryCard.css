@@ -1,37 +1,52 @@
-.clinical-history-card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 16px 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  transition: box-shadow 0.3s ease;
-  cursor: default;
-  border: 1px solid black;
-}
-
-.clinical-history-card:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.clinical-history-card .header {
+.clinical-history-list {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 12px;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--color-text); /* Aplica color global al texto */
 }
 
-.clinical-history-card .date {
-  font-size: 0.85rem;
-  color: #777;
+.historia-card {
+  max-width: 90%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--color-text); /* Aplica color al texto de cada tarjeta */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: var(--colortext);
 }
 
-.clinical-history-card .content p {
-  margin: 8px 0;
-  font-size: 1rem;
-  line-height: 1.4;
-  color: #333;
+.historia-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-.clinical-history-card strong {
-  color: #555;
+.historia-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.historia-actions button {
+  padding: 0.4rem 0.7rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  color: var(--color-text);
+  transition: background-color 0.2s;
+}
+
+.historia-actions button:hover {
+  background-color: #e0e0e0;
+}
+.btn-add-history {
+  background-color: var(--button);
+  margin-right: 40px;
+}
+
+.btn-add-history:hover {
+  background-color: var(--buttonhover);
 }

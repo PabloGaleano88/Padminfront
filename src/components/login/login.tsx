@@ -56,7 +56,10 @@ export default function Login() {
     return (
         <div className="login-container">
             <div className="login-card">
-                <img className="logo-login" src="/logo.png" alt="" />
+                <div className="title">
+                    <img className="logo-login" src="/logo.png" alt="" />
+                    <h1>Padmin</h1>
+                </div>
                 <h2 className="login-title">Te damos la bienvenida!</h2>
                 <h4>Ingresa tu correo electrónico y contraseña para acceder o registrarte.</h4>
                 <form onSubmit={handleSubmit}>
