@@ -14,11 +14,13 @@ export default function DashboardHeader() {
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
     useEffect(() => {
-        const storedName = localStorage.getItem("userName");
-        if (storedName) {
-            setUserName(storedName);
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            const user = JSON.parse(storedUser);
+            setUserName(user.name || "");
         }
     }, []);
+
 
     const handleLogout = () => {
         localStorage.clear();
@@ -35,7 +37,7 @@ export default function DashboardHeader() {
             <nav className={`menu ${menuOpen ? "open" : ""}`}>
                 <div className="icon-link"><Link to="/dashboard">Dashboard</Link><HomeIcon /></div>
                 <div className="icon-link"><Link to="/patients">Consultantes</Link> <GroupIcon /></div>
-                <div className="icon-link"><Link to="/perfil">Mi perfil</Link><PersonIcon /></div>
+                <div className="icon-link"><Link to="/profile">Mi perfil</Link><PersonIcon /></div>
                 <div className="icon-link"><button className="logout-button" onClick={handleLogout}>Cerrar sesión</button><ExitToAppIcon /></div>
             </nav>
         </header >

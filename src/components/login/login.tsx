@@ -24,7 +24,7 @@ export default function Login() {
             if (res.ok) {
                 console.log(data)
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("userName", data.user.name);
+                localStorage.setItem("user", JSON.stringify(data.user));
                 Swal.fire({
                     icon: "success",
                     title: "¡Bienvenido!",
@@ -86,7 +86,7 @@ export default function Login() {
                     />
 
                     <button className="login-button" type="submit">Ingresar</button>
-                    <a className="login-forgot" href="">¿Olvidaste tu contraseña? Te ayudamos</a>
+                    <a className="login-forgot" href="/forgot-password">¿Olvidaste tu contraseña? Te ayudamos</a>
                 </form>
 
                 <div className="login-footer">
@@ -94,42 +94,48 @@ export default function Login() {
                 </div>
 
                 <div className="separator"></div>
+                <div className="google-login-container">
 
-                <GoogleLogin
-                    onSuccess={(credentialResponse) => {
-                        fetch("http://localhost:3000/api/auth/google", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ credential: credentialResponse.credential }),
-                        })
-                            .then((res) => res.json())
-                            .then((data) => {
-                                localStorage.setItem("token", data.token);
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Inicio de sesión con Google exitoso",
-                                    text: "Redirigiendo...",
-                                }).then(() => {
-                                    navigate("/dashboard");
-                                });
+                    <GoogleLogin
+                        onSuccess={(credentialResponse) => {
+                            fetch("http://localhost:3000/api/auth/google", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ credential: credentialResponse.credential }),
                             })
-                            .catch((err) => {
-                                console.error("Error al iniciar sesión con Google", err);
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Error con Google",
-                                    text: "No se pudo iniciar sesión",
+                                .then((res) => res.json())
+                                .then((data) => {
+                                    localStorage.setItem("token", data.token);
+                                    localStorage.setItem("user", JSON.stringify(data.user));
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Inicio de sesión con Google exitoso",
+                                        text: "Redirigiendo...",
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                        timerProgressBar: true,
+                                    }).then(() => {
+                                        navigate("/dashboard");
+                                    });
+                                })
+                                .catch((err) => {
+                                    console.error("Error al iniciar sesión con Google", err);
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Error con Google",
+                                        text: "No se pudo iniciar sesión",
+                                    });
                                 });
+                        }}
+                        onError={() => {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Falló el inicio de sesión con Google",
+                                text: "Intentalo nuevamente",
                             });
-                    }}
-                    onError={() => {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Falló el inicio de sesión con Google",
-                            text: "Intentalo nuevamente",
-                        });
-                    }}
-                />
+                        }}
+                    />
+                </div>
             </div>
         </div>
     );

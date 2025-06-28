@@ -1,12 +1,14 @@
 .clinical-history-list {
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
   color: var(--color-text); /* Aplica color global al texto */
 }
 
 .historia-card {
-  max-width: 90%;
+  max-width: 100%;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 12px;

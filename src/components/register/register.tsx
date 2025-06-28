@@ -23,7 +23,6 @@ export default function Register() {
             return;
         }
 
-
         try {
             const res = await fetch("http://localhost:3000/api/auth/register", {
                 method: "POST",
@@ -36,7 +35,6 @@ export default function Register() {
             if (res.ok) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
-
 
                 Swal.fire({
                     icon: "success",
@@ -61,7 +59,6 @@ export default function Register() {
                 text: "No se pudo conectar al servidor.",
             });
         }
-
     };
 
     return (
@@ -98,7 +95,20 @@ export default function Register() {
                     </select>
                 </div>
 
-                <button className="register-button" type="submit">Registrarme</button>
+                <div className="button-group">
+                    <button
+                        type="button"
+                        className="btn"
+                        onClick={() => navigate("/login")}
+                    >
+                        Volver
+                    </button>
+
+                    <button className="btn" type="submit">
+                        Registrarme
+                    </button>
+                </div>
+
             </form>
         </div>
     );

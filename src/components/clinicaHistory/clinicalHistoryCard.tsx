@@ -23,10 +23,12 @@ export default function ClinicalHistoryCard({ historias, onDelete, onEdit }: Pro
         <div className="clinical-history-list">
             {historias.map((historia) => (
                 <div key={historia._id} className="historia-card">
-                    <p><strong>Fecha:</strong> {new Date(historia.date).toLocaleDateString()}</p>
-                    <p><strong>Observaciones:</strong> {historia.observations}</p>
-                    <p><strong>Diagnóstico:</strong> {historia.diagnosis}</p>
-                    <p><strong>Tratamiento:</strong> {historia.treatment}</p>
+                    <p><strong>Fecha:</strong> {new Date(historia.date).toLocaleString()}</p>
+                    <div>
+                        <strong></strong>
+                        <div dangerouslySetInnerHTML={{ __html: historia.observations }} />
+                    </div>
+
                     <div className="historia-actions">
                         <button onClick={() => onEdit(historia)}>✎ Editar</button>
                         <button onClick={() => onDelete(historia._id)}>🗑 Eliminar</button>

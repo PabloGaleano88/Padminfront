@@ -19,18 +19,31 @@ form {
     margin-inline: 3px;
   }
 }
-.register-button {
-  width: 100%;
-  background-color: var(--button);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.button-group {
+  display: flex;
+  gap: 10px; /* espacio entre botones */
+  margin-top: 1rem;
 }
 
-.register-button:hover {
-  background-color: var(--buttonhover);
+.btn {
+  flex: 1; /* para que ambos tengan igual ancho */
+  padding: 0.75rem 1rem;
+  background-color: #9b5fa9; /* mismo color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.btn:hover {
+  background-color: #72277f; /* color hover */
+}
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }

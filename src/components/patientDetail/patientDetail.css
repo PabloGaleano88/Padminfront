@@ -1,0 +1,247 @@
+.patient-detail-layout {
+  margin-top: 50px;
+  display: flex;
+  gap: 2rem;
+  padding: 1rem 2rem;
+  min-height: 80vh;
+  box-sizing: border-box;
+}
+
+.patient-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 300px;
+  flex: 1;
+  background: #f7f4fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 8px #ccc;
+  color: var(--colortext);
+}
+.patient-summary a {
+  display: flex;
+}
+
+.btn-whatsapp {
+  display: inline-block;
+  background-color: #25d366;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.patient-tabs {
+  width: 100%;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 8px #ccc;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tabs-buttons button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #eee;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+.tabs-buttons button.active,
+.tabs-buttons button:hover {
+  background-color: #72277f;
+  color: white;
+}
+
+.tab-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 60vh;
+  color: var(--colortext);
+}
+
+.tab-content p {
+  margin: 0.5rem 0;
+}
+
+.historia-clinica-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-add-history {
+  background-color: #72277f;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-add-history:hover {
+  background-color: #5a1c5a;
+}
+.modal-content .ProseMirror {
+  min-height: 100px; /* altura mínima, ajusta a tu gusto */
+  max-height: 300px; /* opcional, para que no crezca mucho */
+  overflow-y: auto; /* para scroll si se llena */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: white;
+  font-size: 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.modal-content {
+  width: 100%; /* o el tamaño que prefieras */
+  max-width: 90vw; /* para que no salga del viewport */
+  background-color: white;
+  border-radius: 6px;
+}
+
+.menu-bar {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.menu-bar button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menu-bar button:hover {
+  background-color: #e0e0e0;
+}
+
+.menu-bar button.is-active {
+  background-color: #1976d2;
+  color: white;
+  border-color: #1976d2;
+}
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.modal-buttons button {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.modal-buttons button:first-child {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.modal-buttons button:first-child:hover {
+  background-color: #e0e0e0;
+}
+
+.modal-buttons button:last-child {
+  background-color: #1976d2;
+  color: white;
+}
+
+.modal-buttons button:last-child:hover {
+  background-color: #155a9c;
+}
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.modal-buttons button {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.modal-buttons button:first-child {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.modal-buttons button:first-child:hover {
+  background-color: #e0e0e0;
+}
+
+.modal-buttons button:last-child {
+  background-color: #1976d2;
+  color: white;
+}
+
+.modal-buttons button:last-child:hover {
+  background-color: #155a9c;
+}
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.modal-buttons button {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* Botón Cancelar */
+.modal-buttons button:first-child {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.modal-buttons button:first-child:hover {
+  background-color: #e0e0e0;
+}
+
+/* Botón Guardar */
+.modal-buttons button:last-child {
+  background-color: var(--button);
+  color: white;
+}
+
+.modal-buttons button:last-child:hover {
+  background-color: var(--buttonhover);
+}
