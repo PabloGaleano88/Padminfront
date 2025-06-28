@@ -11,19 +11,10 @@ export default function AddPaciente({ onAdd }: { onAdd: () => void }) {
     const [initialComment, setInitialComment] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
-        console.log("submit enviado")
         e.preventDefault();
-        console.log("Enviando datos:", {
-            firstName,
-            lastName,
-            dni,
-            birthDate,
-            email,
-            phone,
-            initialComment,
-        });
+
         try {
-            const res = await fetch("http://localhost:3000/api/patients", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/patients`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

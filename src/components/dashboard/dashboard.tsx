@@ -25,7 +25,7 @@ export default function Dashboard() {
         const fetchPatients = async () => {
             const token = localStorage.getItem("token");
             try {
-                const res = await fetch("http://localhost:3000/api/patients", {
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/patients`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

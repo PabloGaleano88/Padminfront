@@ -23,7 +23,6 @@ function App() {
     location.pathname.startsWith("/reset-password");
 
   ;
-  console.log(showMainHeader)
   return (
     <div className="App">
       <main className="main-content">

@@ -61,7 +61,7 @@ export default function PatientDetail() {
         setLoading(true);
         setError("");
 
-        fetch(`http://localhost:3000/api/patients/${id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}api/patients/${id}`, {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
             .then((res) => {
@@ -83,7 +83,7 @@ export default function PatientDetail() {
     const fetchHistorias = () => {
         if (!id) return;
 
-        fetch(`http://localhost:3000/api/clinicalhistory/patient/${id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory/patient/${id}`, {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
             .then((res) => {
@@ -108,7 +108,7 @@ export default function PatientDetail() {
 
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch("http://localhost:3000/api/clinicalhistory", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -149,7 +149,7 @@ export default function PatientDetail() {
 
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:3000/api/clinicalhistory/${editHistoria._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory/${editHistoria._id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -180,7 +180,7 @@ export default function PatientDetail() {
 
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:3000/api/clinicalhistory/${historiaId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory/${historiaId}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
             });

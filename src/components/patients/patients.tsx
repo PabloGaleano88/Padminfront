@@ -32,7 +32,6 @@ if (token) {
     const decoded = parseJwt(token);
     if (decoded) {
         userId = decoded.id;
-        console.log("UserId extraído del token:", userId);
     }
 }
 
@@ -43,7 +42,7 @@ export default function Pacientes() {
     const [searchTerm, setSearchTerm] = useState("");
 
     const fetchPacientes = () => {
-        fetch("http://localhost:3000/api/patients", {
+        fetch(`${import.meta.env.VITE_API_URL}/api/patients`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -114,7 +113,7 @@ export default function Pacientes() {
         if (formValues) {
             try {
                 // 1. Crear paciente
-                const resPaciente = await fetch("http://localhost:3000/api/patients", {
+                const resPaciente = await fetch(`${import.meta.env.VITE_API_URL}/api/patients`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -140,7 +139,7 @@ export default function Pacientes() {
                 };
 
 
-                const resHistoria = await fetch("http://localhost:3000/api/clinicalhistory", {
+                const resHistoria = await fetch(`${import.meta.env.VITE_API_URL}api/clinicalhistory`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -177,7 +176,7 @@ export default function Pacientes() {
         if (result.isConfirmed) {
             try {
                 const token = localStorage.getItem("token");
-                const res = await fetch(`http://localhost:3000/api/patients/${pacienteId}`, {
+                const res = await fetch(`${import.meta.env.VITE_API_URL} / api / patients / ${pacienteId}`, {
                     method: "DELETE",
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -201,7 +200,7 @@ export default function Pacientes() {
         const { value: formValues } = await Swal.fire({
             title: "Editar paciente",
             html: `
-      <label>Nombre:</label>
+                < label > Nombre:</label >
       <input id="swal-input-nombre" class="swal2-input" value="${paciente.firstName}" /><br />
       <label>Apellido:</label>
       <input id="swal-input-apellido" class="swal2-input" value="${paciente.lastName}" /><br />
@@ -238,7 +237,7 @@ export default function Pacientes() {
 
         if (formValues) {
             try {
-                const res = await fetch(`http://localhost:3000/api/patients/${paciente._id}`, {
+                const res = await fetch(`${import.meta.env.VITE_API_URL} / api / patients / ${paciente._id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -311,7 +310,7 @@ export default function Pacientes() {
                             <div
                                 key={paciente._id}
                                 className="paciente-row"
-                                onClick={() => navigate(`/patients/${paciente._id}`)}
+                                onClick={() => navigate(`/ patients / ${paciente._id}`)}
                             >
                                 <span>{paciente.firstName} {paciente.lastName}</span>
                                 <span>{paciente.phone || "-"}</span>
