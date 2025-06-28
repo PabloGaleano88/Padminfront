@@ -139,7 +139,7 @@ export default function Pacientes() {
                 };
 
 
-                const resHistoria = await fetch(`${import.meta.env.VITE_API_URL}api/clinicalhistory`, {
+                const resHistoria = await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -311,6 +311,8 @@ export default function Pacientes() {
                                 key={paciente._id}
                                 className="paciente-row"
                                 onClick={() => navigate(`/patients/${paciente._id}`)}
+
+
                             >
                                 <span>{paciente.firstName} {paciente.lastName}</span>
                                 <span>{paciente.phone || "-"}</span>

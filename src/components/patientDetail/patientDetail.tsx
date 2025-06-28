@@ -61,7 +61,7 @@ export default function PatientDetail() {
         setLoading(true);
         setError("");
 
-        fetch(`${import.meta.env.VITE_API_URL}api/patients/${id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/patients/${id}`, {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
             .then((res) => {
