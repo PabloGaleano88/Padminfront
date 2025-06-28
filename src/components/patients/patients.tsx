@@ -7,34 +7,6 @@ import { useNavigate } from "react-router-dom";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 
-interface TokenPayload {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-}
-
-// Función para decodificar el payload del JWT sin librería
-function parseJwt(token: string): TokenPayload | null {
-    try {
-        const base64Payload = token.split('.')[1];
-        const payload = atob(base64Payload);  // Decodifica Base64
-        return JSON.parse(payload);
-    } catch {
-        return null;
-    }
-}
-
-const token = localStorage.getItem("token");
-let userId = "";
-
-if (token) {
-    const decoded = parseJwt(token);
-    if (decoded) {
-        userId = decoded.id;
-    }
-}
-
 export default function Pacientes() {
     const [pacientes, setPacientes] = useState<Paciente[]>([]);
     const [loading, setLoading] = useState(true);
