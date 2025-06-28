@@ -1,6 +1,6 @@
 import "./patientDetail.css";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ClinicalHistoryCard from "../clinicaHistory/clinicalHistoryCard";
 import DashboardHeader from "../dashboardHeader/dashboardHeader";
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -30,8 +30,6 @@ interface HistoriaClinica {
 
 export default function PatientDetail() {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
-
     const [paciente, setPaciente] = useState<Paciente | null>(null);
     const [historias, setHistorias] = useState<HistoriaClinica[]>([]);
     const [loading, setLoading] = useState(true);
