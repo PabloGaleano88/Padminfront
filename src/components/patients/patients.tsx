@@ -111,7 +111,7 @@ export default function Pacientes() {
                 };
 
 
-                const resHistoria = await fetch(`${import.meta.env.VITE_API_URL}api/clinicalhistory`, {
+                const resHistoria = await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -148,7 +148,7 @@ export default function Pacientes() {
         if (result.isConfirmed) {
             try {
                 const token = localStorage.getItem("token");
-                const res = await fetch(`${import.meta.env.VITE_API_URL} / api / patients / ${pacienteId}`, {
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/patients/${pacienteId}`, {
                     method: "DELETE",
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -209,7 +209,7 @@ export default function Pacientes() {
 
         if (formValues) {
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_URL} / api / patients / ${paciente._id}`, {
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/patients/${paciente._id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -282,7 +282,9 @@ export default function Pacientes() {
                             <div
                                 key={paciente._id}
                                 className="paciente-row"
-                                onClick={() => navigate(`/ patients / ${paciente._id}`)}
+                                onClick={() => navigate(`/patients/${paciente._id}`)}
+
+
                             >
                                 <span>{paciente.firstName} {paciente.lastName}</span>
                                 <span>{paciente.phone || "-"}</span>
