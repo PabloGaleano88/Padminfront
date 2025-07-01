@@ -252,7 +252,7 @@ export default function PatientDetail() {
                             <div className="tab-ficha">
                                 <p><strong>Nombre:</strong> {paciente.firstName} {paciente.lastName}</p>
                                 <p><strong>DNI:</strong> {paciente.dni}</p>
-                                <p><strong>Fecha de nacimiento:</strong> {new Date(paciente.birthDate).toLocaleDateString()}</p>
+                                <p><strong>Fecha de nacimiento:</strong> {paciente.birthDate.split("T")[0]}</p>
                                 <p><strong>Email:</strong> {paciente.email || "No disponible"}</p>
                                 <p><strong>Teléfono:</strong> {paciente.phone || "No disponible"}</p>
                                 <p><strong>Motivo de consulta:</strong> {paciente.motivoConsulta || "No disponible"}</p>

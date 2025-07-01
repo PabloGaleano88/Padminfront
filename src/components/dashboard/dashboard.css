@@ -29,12 +29,13 @@
   border: 1px solid #d4c7ee;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease;
-  max-height: 200px;
+  height: 370px;
   padding: 1rem;
-  overflow: hidden; /* para evitar que el contenido se salga si es muy largo */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* para centrar el contenido verticalmente */
+  justify-content: center;
+  border-left: 6px solid #e5afea; /* 💡 Línea lateral agregada */
 }
 
 .card:hover {
@@ -47,25 +48,6 @@
   margin: 0; /* Opcional: para quitar márgenes por defecto */
 }
 
-.card.active {
-  background: #f9f4ff;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #d4c7ee;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s ease;
-  max-height: 200px; /* o el alto que quieras */
-  padding: 1rem;
-  overflow: hidden; /* para evitar que el contenido se salga si es muy largo */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* para centrar el contenido verticalmente */
-  p {
-    color: var(--colortext);
-    font-size: 25px; /* Tamaño del texto */
-    text-align: center;
-  }
-}
 /* Asegura que body y html ocupen toda la pantalla */
 html,
 body {
@@ -93,4 +75,19 @@ body {
   ); /* corregido 3fr -> 1fr */
   gap: 1.5rem;
   margin-top: 2rem;
+}
+
+.card.cumpleanios ul {
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.card.cumpleanios li {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
 }
