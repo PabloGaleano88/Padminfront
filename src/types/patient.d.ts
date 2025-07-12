@@ -1,18 +1,21 @@
-interface ClinicalHistory {
+export interface ClinicalHistory {
     _id: string;
     date: string;
     description: string;
     // otros campos que tengas
 }
 
-interface Paciente {
+export interface Paciente {
     _id: string;
     firstName: string;
     lastName: string;
     dni: string;
     birthDate: string;
     email?: string;
-    motivoConsulta?: string;
     phone?: string;
-    proximoTurno?: Turno | null;
-}
+    motivoConsulta?: string;
+    clinicalHistories: ClinicalHistory[];
+
+    proximoTurno?: string; // si solo estás usando la fecha como string
+    // Otros campos del turno si te interesa
+};
