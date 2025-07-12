@@ -21,6 +21,7 @@ export default function Pacientes() {
         })
             .then((res) => res.json())
             .then((data) => {
+                console.log("Pacientes desde backend:", data); // 👈 CONSOLE LOG
                 setPacientes(data);
                 setLoading(false);
             })
@@ -274,6 +275,7 @@ export default function Pacientes() {
                             <span>Nombre</span>
                             <span>Teléfono</span>
                             <span>Email</span>
+                            <span>Proximo Turno</span>
                             <span>Acciones</span>
                         </div>
 
@@ -282,13 +284,23 @@ export default function Pacientes() {
                             <div
                                 key={paciente._id}
                                 className="paciente-row"
-                                onClick={() => navigate(`/patients/${paciente._id}`)}
-
-
-                            >
+                                onClick={() => navigate(`/patients/${paciente._id}`)}>
                                 <span>{paciente.firstName} {paciente.lastName}</span>
                                 <span>{paciente.phone || "-"}</span>
                                 <span>{paciente.email || "-"}</span>
+                                <span>
+                                    {paciente.proximoTurno
+                                        ? new Date(paciente.proximoTurno).toLocaleString("es-AR", {
+                                            day: "2-digit",
+                                            month: "2-digit",
+                                            year: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            hour12: false,
+                                        })
+                                        : "Sin turno"}
+                                </span>
+
                                 <span className="paciente-actions" onClick={(e) => e.stopPropagation()}>
                                     <button
                                         className="btn-edit-paciente"

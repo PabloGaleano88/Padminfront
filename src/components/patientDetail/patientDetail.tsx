@@ -4,7 +4,10 @@ import { useParams } from "react-router-dom";
 import ClinicalHistoryCard from "../clinicaHistory/clinicalHistoryCard";
 import DashboardHeader from "../dashboardHeader/dashboardHeader";
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Swal from "sweetalert2";
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
@@ -18,6 +21,14 @@ interface Paciente {
     email?: string;
     motivoConsulta?: string;
     phone?: string;
+    proximoTurno?: {
+        _id: string;
+        date: string;
+        professional?: {
+            _id: string;
+            name: string;
+        };
+    };
 }
 
 interface HistoriaClinica {
@@ -54,6 +65,18 @@ export default function PatientDetail() {
         content: editHistoriaContent,
         onUpdate: ({ editor }) => setEditHistoriaContent(editor.getHTML()),
     });
+    function toLocalDatetimeInputValue(dateString: string): string {
+        const date = new Date(dateString);
+        const pad = (n: number) => n.toString().padStart(2, "0");
+
+        const yyyy = date.getFullYear();
+        const mm = pad(date.getMonth() + 1);
+        const dd = pad(date.getDate());
+        const hh = pad(date.getHours());
+        const min = pad(date.getMinutes());
+
+        return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+    }
 
     useEffect(() => {
         if (!id) return;
@@ -86,10 +109,7 @@ export default function PatientDetail() {
         fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory/patient/${id}`, {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
-            .then((res) => {
-                if (!res.ok) throw new Error("Error al obtener la historia clínica");
-                return res.json();
-            })
+            .then((res) => res.json())
             .then((data) => setHistorias(data))
             .catch((err) => console.error("Error al obtener historia clínica:", err));
     };
@@ -100,6 +120,116 @@ export default function PatientDetail() {
         addEditor?.commands.setContent("");
     };
 
+    const handleAddAppointment = async () => {
+        const { value: fecha } = await Swal.fire({
+            title: "Selecciona la fecha del próximo turno",
+            input: "datetime-local",
+            inputLabel: "Fecha y hora",
+            showCancelButton: true,
+            inputValidator: (value) => {
+                if (!value) return "Debes ingresar una fecha";
+            },
+        });
+
+        if (!fecha) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/appointments`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ patient: id, date: new Date(fecha).toISOString() }),
+            });
+
+            if (!res.ok) throw new Error("Error al guardar el turno");
+
+            const nuevoTurno = await res.json();
+            setPaciente((prev) =>
+                prev ? { ...prev, proximoTurno: nuevoTurno } : prev
+            );
+            Swal.fire("Turno agregado", "El próximo turno fue guardado", "success");
+        } catch (err) {
+            Swal.fire("Error", "No se pudo guardar el turno", "error");
+        }
+    };
+
+    // Función para editar el próximo turno
+    const handleEditAppointment = async () => {
+        if (!paciente) return;
+
+        const { value: fecha } = await Swal.fire({
+            title: "Editar fecha del próximo turno",
+            input: "datetime-local",
+            inputLabel: "Fecha y hora",
+            inputValue: paciente.proximoTurno
+                ? toLocalDatetimeInputValue(paciente.proximoTurno.date)
+                : undefined,
+            showCancelButton: true,
+            inputValidator: (value) => {
+                if (!value) return "Debes ingresar una fecha";
+            },
+        });
+
+        if (!fecha) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/appointments/${paciente.proximoTurno?._id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ date: new Date(fecha).toISOString() }),
+            });
+
+            if (!res.ok) throw new Error("Error al editar el turno");
+
+            const updatedTurno = await res.json();
+            setPaciente((prev) =>
+                prev ? { ...prev, proximoTurno: updatedTurno } : prev
+            );
+            Swal.fire("Turno actualizado", "El próximo turno fue actualizado", "success");
+        } catch (err) {
+            Swal.fire("Error", "No se pudo actualizar el turno", "error");
+        }
+    };
+
+    // Función para eliminar el próximo turno
+    const handleDeleteAppointment = async () => {
+        if (!paciente?.proximoTurno) return;
+
+        const confirm = await Swal.fire({
+            title: "¿Estás seguro de eliminar el próximo turno?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar",
+        });
+
+        if (!confirm.isConfirmed) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/appointments/${paciente.proximoTurno._id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) throw new Error("Error al eliminar el turno");
+
+            setPaciente((prev) => prev ? { ...prev, proximoTurno: undefined } : prev);
+            Swal.fire("Turno eliminado", "El próximo turno fue eliminado", "success");
+        } catch (err) {
+            Swal.fire("Error", "No se pudo eliminar el turno", "error");
+        }
+    };
+
     const handleSaveHistoria = async () => {
         if (!newHistoriaContent.trim() || newHistoriaContent === "<p></p>") {
             alert("La historia clínica no puede estar vacía.");
@@ -108,7 +238,7 @@ export default function PatientDetail() {
 
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory`, {
+            await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -123,13 +253,11 @@ export default function PatientDetail() {
                 }),
             });
 
-            if (!res.ok) throw new Error("Error al guardar historia clínica");
-
             setShowAddModal(false);
             setNewHistoriaContent("");
             addEditor?.commands.clearContent();
             fetchHistorias();
-        } catch (error) {
+        } catch {
             alert("Error al guardar historia clínica");
         }
     };
@@ -149,7 +277,7 @@ export default function PatientDetail() {
 
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory/${editHistoria._id}`, {
+            await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory/${editHistoria._id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -163,14 +291,12 @@ export default function PatientDetail() {
                 }),
             });
 
-            if (!res.ok) throw new Error("Error al editar historia clínica");
-
             setShowEditModal(false);
             setEditHistoria(null);
             setEditHistoriaContent("");
             editEditor?.commands.clearContent();
             fetchHistorias();
-        } catch (error) {
+        } catch {
             alert("Error al editar historia clínica");
         }
     };
@@ -180,16 +306,14 @@ export default function PatientDetail() {
 
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory/${historiaId}`, {
+            await fetch(`${import.meta.env.VITE_API_URL}/api/clinicalhistory/${historiaId}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            if (!res.ok) throw new Error("No se pudo eliminar la historia clínica");
-
             alert("Historia clínica eliminada correctamente");
             fetchHistorias();
-        } catch (error) {
+        } catch {
             alert("Error al eliminar la historia clínica");
         }
     };
@@ -243,8 +367,52 @@ export default function PatientDetail() {
                         {activeTab === "resumen" && (
                             <div className="tab-resumen">
                                 <p><strong>Motivo de consulta:</strong> {paciente.motivoConsulta || "No disponible"}</p>
-                                <p><strong>Próxima sesión:</strong> Próximamente</p>
                                 <p><strong>Historial de pagos:</strong> Próximamente</p>
+                                <p>
+                                    <strong>Próxima sesión:</strong>{" "}
+                                    {paciente.proximoTurno?.date ? (
+                                        <>
+                                            {new Date(paciente.proximoTurno.date).toLocaleString("es-AR", {
+                                                day: "2-digit",
+                                                month: "2-digit",
+                                                year: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                hour12: false,
+                                            })}
+                                            <span
+                                                style={{
+                                                    marginLeft: "10px",
+                                                    cursor: "pointer",
+                                                    display: "inline-flex",
+                                                    gap: "8px",
+                                                    verticalAlign: "middle",
+                                                }}
+                                            >
+                                                <EditIcon
+                                                    fontSize="small"
+                                                    color="primary"
+                                                    onClick={handleEditAppointment}
+                                                    titleAccess="Editar próximo turno"
+                                                />
+                                                <DeleteIcon
+                                                    fontSize="small"
+                                                    color="error"
+                                                    onClick={handleDeleteAppointment}
+                                                    titleAccess="Eliminar próximo turno"
+                                                />
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <AddCircleIcon
+                                            color="primary"
+                                            fontSize="medium"
+                                            style={{ cursor: "pointer", marginLeft: "10px", verticalAlign: "middle", color: "green" }}
+                                            titleAccess="Agregar próximo turno"
+                                            onClick={handleAddAppointment}
+                                        />
+                                    )}
+                                </p>
                             </div>
                         )}
 

@@ -109,7 +109,7 @@
 .pacientes-header,
 .paciente-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 2fr 0.5fr;
+  grid-template-columns: 2fr 1fr 2fr 1.2fr 1fr; /* ✅ Ahora tiene 5 columnas */
   gap: 1rem;
   align-items: center;
   padding: 1rem;

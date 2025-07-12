@@ -5,14 +5,14 @@ interface ClinicalHistory {
     // otros campos que tengas
 }
 
-export interface Paciente {
+interface Paciente {
     _id: string;
     firstName: string;
     lastName: string;
     dni: string;
     birthDate: string;
     email?: string;
-    phone?: string;
     motivoConsulta?: string;
-    clinicalHistories: ClinicalHistory[];  // <-- aquí
+    phone?: string;
+    proximoTurno?: Turno | null;
 }
